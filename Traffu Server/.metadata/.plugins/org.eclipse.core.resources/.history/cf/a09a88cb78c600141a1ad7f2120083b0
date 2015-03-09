@@ -21,7 +21,7 @@ def refresh(request):
         try:
             #url = "http://www.onemotoring.com.sg/publish/onemotoring/en/on_the_roads/traffic_news.main.step1.html?viewType=RoadName&filterBy=All+Roads&sortBy=1"
             #url = "http://www.onemotoring.com.sg/publish/onemotoring/en/on_the_roads/traffic_news.main.step1.html?viewType=RoadName&filterBy=All+Roads&sortBy=All+Types"
-            url =  "http://www.onemotoring.com.sg/publish/onemotoring/en/on_the_roads/traffic_news.main.step1.html?viewType=RoadName&filterBy=Expressways&sortBy=8"
+            #url =  "http://www.onemotoring.com.sg/publish/onemotoring/en/on_the_roads/traffic_news.main.step1.html?viewType=RoadName&filterBy=Expressways&sortBy=8"
             req = urllib2.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
             res = urllib2.urlopen(req)
             news = html.fromstring(res.read()).xpath("/html/body/div[3]/div[3]/div[5]/div/div[3]/div[1]/div[1]/form/div/div[3]/div/div[1]/div/div[3]/p/text()")
