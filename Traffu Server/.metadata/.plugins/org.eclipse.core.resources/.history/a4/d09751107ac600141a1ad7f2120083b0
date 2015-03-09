@@ -11,7 +11,7 @@ import sys, requests, json
 
 def index(request):
     if request.method == 'GET':
-        return HttpResponse("Welcome to Traffu!")
+        return HttpResponse("No Updates")
 
 '''
 To get new updates
