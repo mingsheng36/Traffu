@@ -6,5 +6,6 @@ urlpatterns = patterns('',
     url(r'^$', views.index),
     url(r'^refresh', views.refresh),
     url(r'^register', views.register),
+    
     url(r'^admin/', include(admin.site.urls)),
 )

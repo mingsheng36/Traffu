@@ -2,26 +2,24 @@
 -- START DISKCACHE
 C:\Users\Jayden\Desktop\Traffu\Traffu Server\.metadata\.plugins\org.eclipse.core.resources\.projects\Traffu\com.python.pydev.analysis\v2_indexcache
 Traffu.settings|1425903641463|C:\Users\Jayden\Desktop\Traffu\Traffu Server\Traffu\Traffu\settings.py
-Traffu.urls|1425911740985|C:\Users\Jayden\Desktop\Traffu\Traffu Server\Traffu\Traffu\urls.py
 Traffu.models|1425913931751|C:\Users\Jayden\Desktop\Traffu\Traffu Server\Traffu\Traffu\models.py
 Traffu.__init__|1425895017842|C:\Users\Jayden\Desktop\Traffu\Traffu Server\Traffu\Traffu\__init__.py
-Traffu.views|1425916809391|C:\Users\Jayden\Desktop\Traffu\Traffu Server\Traffu\Traffu\views.py
+Traffu.views|1425918284108|C:\Users\Jayden\Desktop\Traffu\Traffu Server\Traffu\Traffu\views.py
 Traffu.admin|1425911718758|C:\Users\Jayden\Desktop\Traffu\Traffu Server\Traffu\Traffu\admin.py
 Traffu.wsgi|1425895017842|C:\Users\Jayden\Desktop\Traffu\Traffu Server\Traffu\Traffu\wsgi.py
 manage|1425895017836|C:\Users\Jayden\Desktop\Traffu\Traffu Server\Traffu\manage.py
 -- END DISKCACHE
 -- START DICTIONARY
-7
+6
 1=Traffu.settings
-5=Traffu.urls
-6=News
-7=Ids
+5=News
+6=Ids
 3=Traffu.models
 4=Traffu.views
 2=Traffu.wsgi
 -- END DICTIONARY
 -- START TREE 1
-27
+28
 !<m|0|
 all|1|ALLOWED_HOSTS!11@
 app|1|application!19@
@@ -39,6 +37,7 @@ mid|1|MIDDLEWARE_CLASSES!11@
 myc|0|
 new|1|News!25@
 old|0|
+ref|1|refresh!34@
 reg|1|register!34@
 roo|1|ROOT_URLCONF!11@
 sec|1|SECRET_KEY!11@
@@ -46,19 +45,19 @@ sta|1|STATIC_URL!11@
 tem|1|TEMPLATE_DEBUG!11@
 tim|1|TIME_ZONE!11@
 upd|0|
-url|1|urlpatterns!43@
+url|0|
 use|3|USE_L10N!11@USE_I18N!11@USE_TZ!11@
 wsg|1|WSGI_APPLICATION!11@
 -- END TREE
 -- START TREE 2
 9
-__u|2|__unicode__!6&26@__unicode__!7&26@
+__u|2|__unicode__!5&26@__unicode__!6&26@
 cod|0|
 do|0|
 id|0|
-ids|1|ids!7&27@
+ids|1|ids!6&27@
 nam|0|
-new|1|news!6&27@
+new|1|news!5&27@
 run|0|
 sch|0|
 -- END TREE
