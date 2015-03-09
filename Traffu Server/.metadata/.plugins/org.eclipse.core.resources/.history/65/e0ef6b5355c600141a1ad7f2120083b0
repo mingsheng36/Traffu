@@ -1,0 +1,13 @@
+'''
+Created on 9 Mar 2015
+
+@author: Jayden
+'''
+from django.db.models import Model, CharField
+
+@admin.register(News)
+class News(Model):
+    news = CharField(max_length=128, unique=True)
+    
+    def __unicode__(self):
+        return self.news

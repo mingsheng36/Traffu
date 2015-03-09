@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Traffu</string>
+    <string name="action_settings">Settings</string>
+    <string name="na">NA</string>
+    <string name="cte_seletar">CTE (Towards Seletar)</string>
+    <string name="cte_city">CTE (Towards City)</string>
+    <string name="tpe_changi">TPE (Towards Changi)</string>
+    <string name="tpe_seletar">TPE (Towards Seletar)</string>
+    <string name="kpe_punggol">KPE (Towards Punggol)</string>
+    <string name="kpe_city">KPE (Towards City)</string>
+    <string name="pie_changi">PIE (Towards Changi)</string>
+    <string name="pie_tuas">PIE (Towards Tuas)</string>
+    <string name="ecp_city">ECP (Towards City)</string>
+    <string name="ecp_changi">ECP (Towards Changi)</string>
+    <string name="mce_mb">MCE (Towards Marina Bay)</string>
+    <string name="mce_tr">MCE (Towards Tanjong Rhu)</string>
+    <string name="aye_city">AYE (Towards City)</string>
+    <string name="aye_tuas">AYE (Towards Tuas)</string>
+    <string name="kje_jurong">KJE (Towards Jurong)</string>
+    <string name="kje_bp">KJE (Towards Bukit Panjang)</string>
+    <string name="bke_woodlands">BKE (Towards Woodlands)</string>
+    <string name="bke_bt">BKE (Towards Bukit Timah)</string>
+    <string name="sle_woodlands">SLE (Towards Woodlands)</string>
+    <string name="sle_seletar">SLE (Towards Seletar)</string>
+
+    <string-array name="tpe_changi">
+        <item>Jalan Kayu</item>
+        <item>Sengkang East Rd</item>
+        <item>Punggol Rd</item>
+        <item>Lor Halus</item>
+        <item>Pasir Ris Drive 12</item>
+        <item>Elias Rd</item>
+        <item>Pasir Ris Drive 8</item>
+        <item>Tampines Ave 7</item>
+        <item>Loyang Ave</item>
+    </string-array>
+    
+    <string-array name="tpe_changi_cam">
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+    
+    <string-array name="tpe_seletar">
+        <item>Tampines Ave 7</item>
+        <item>Tampines Ave 12</item>
+        <item>Pasir Ris Drive 8</item>
+        <item>Tampines Road</item>
+        <item>Tampines Ave 10</item>
+        <item>Lor Halus</item>
+        <item>Punggol Rd</item>
+        <item>Sengkang Exit</item>
+        <item>Jalan Kayu</item>
+    </string-array>
+
+    <string-array name="tpe_seletar_cam">
+        <item>2</item>
+        <item>1</item>
+    </string-array>
+    
+    <string-array name="sle_seletar">
+        <item>Woodlands Ave 2</item>
+        <item>Woodlands Ave 12</item>
+        <item>Mandai Rd</item>
+        <item>Upper Thomson Rd</item>
+        <item>Lentor Ave</item>
+        <item>TPE/PIE Interchange</item>
+        <item>Yio Chu Kang</item>
+        <item>CTE/SLE Interchange</item>
+    </string-array>
+    
+    <string-array name="sle_seletar_cam">
+        <item>3</item>
+        <item>4</item>
+    </string-array>
+    
+    <string-array name="sle_woodlands">
+        <item>Yishun</item>
+        <item>Upper Thomson Rd</item>
+        <item>Mandai Rd</item>
+        <item>Woodlands Ave 12</item>
+        <item>Woodlands Ave 2</item>
+        <item>BKE/SLE Interchange</item>
+    </string-array>
+
+    <string-array name="sle_woodlands_cam">
+        <item>4</item>
+        <item>3</item>
+    </string-array>
+    
+    <string-array name="cte_city">
+        <item>Ang Mo Kio Ave 5</item>
+        <item>Ang Mo Kio Ave 3</item>
+        <item>Ang Mo Kio Ave 1</item>
+        <item>Braddell Rd</item>
+        <item>CTE/PIE Interchange</item>
+        <item>Moulmein Rd</item>
+        <item>Bt Timah Rd</item>
+        <item>Cairnhill Circle</item>
+        <item>Orchard Rd</item>
+        <item>Havelock Rd</item>
+        <item>Outram Rd</item>
+        <item>AYE/CTE Interchange</item>
+    </string-array>
+	
+    <string-array name="cte_city_cam">
+        <item>12</item>
+        <item>13</item>
+        <item>14</item>
+        <item>15</item>
+    </string-array>
+    
+    <string-array name="cte_seletar">
+        <item>Outram Rd</item>
+        <item>Clemenceau Ave</item>
+        <item>Moulmein Rd</item>
+        <item>Jalan Bahagia</item>
+        <item>CTE/PIE Interchange</item>
+        <item>Braddell Rd</item>
+        <item>Ang Mo Kio Ave 1</item>
+        <item>Ang Mo Kio Ave 3</item>
+        <item>Ang Mo Kio Ave 5</item>
+        <item>Yio Chu Kang</item>
+        <item>SLE/CTE Interchange</item>
+    </string-array>
+    
+    <string-array name="cte_seletar_cam">
+        <item>15</item>
+        <item>14</item>
+        <item>13</item>
+        <item>12</item>
+    </string-array>
+    
+    <string-array name="ecp_changi">
+        <item>Rochor Rd</item>
+        <item>Fort Rd</item>
+        <item>Tanjong Katong Road</item>
+        <item>Marine Parade</item>
+        <item>Marine Vista</item>
+        <item>Siglap Rd</item>
+        <item>Bedok Rd</item>
+        <item>ECP Service Rd</item>
+        <item>ByShore Rd</item>
+        <item>Xilin Ave</item>
+        <item>Changi Airport</item>
+    </string-array>
+    
+    <string-array name="ecp_changi_cam">
+        <item>16</item>
+        <item>20</item>
+        <item>19</item>
+        <item>18</item>
+        <item>17</item>
+    </string-array>
+    
+    <string-array name="ecp_city">
+        <item>ECP/PIE Interchange</item>
+        <item>Xilin Ave</item>
+        <item>ECP Service Rd</item>
+        <item>Bedok Rd</item>
+        <item>Marine Parade</item>
+        <item>Fort Rd</item>
+        <item>Rochor Rd</item>
+    </string-array>
+    
+    <string-array name="ecp_city_cam">
+        <item>17</item>
+        <item>18</item>
+        <item>19</item>
+        <item>20</item>
+        <item>16</item>
+    </string-array>
+    
+    <string-array name="pie_changi">
+        <item>Upper Jurong Rd</item>
+        <item>Pioneer Rd North</item>
+        <item>Jalan Bahar</item>
+        <item>PIE/KJE Interchange</item>
+        <item>Jurong Rd</item>
+        <item>Jurong Town Hall Rd</item>
+        <item>Bukit Batok East Ave 3</item>
+        <item>Clementi Ave 6</item>
+        <item>Bukit Timah Rd</item>
+        <item>PIE/BKE Interchange</item>
+        <item>Eng Neo Ave</item>
+        <item>Lornie Rd</item>
+        <item>Whitley Rd</item>
+        <item>Thomson Rd</item>
+        <item>Kim Keat Link</item>
+        <item>PIE/CTE Interchange</item>
+        <item>Kallang Way</item>
+        <item>Paya Lebar Way</item>
+        <item>Jalan Eunos</item>
+        <item>Bedok Reservoir Rd</item>
+        <item>Bedok North Rd</item>
+        <item>Tampines Ave 5</item>
+        <item>Simei Ave</item>
+        <item>Tampines St 31</item>
+        <item>PIE/TPE Interchange</item>
+        <item>PIE/ECP Interchange</item>
+    </string-array>
+    
+    <string-array name="pie_changi_cam">
+        <item>26</item>
+        <item>22</item>
+        <item>29</item>
+        <item>31</item>
+        <item>28</item>
+        <item>32</item>
+        <item>27</item>
+        <item>30</item>
+        <item>25</item>
+        <item>23</item> 
+    </string-array>
+    
+    <string-array name="pie_tuas">
+        <item>Changi South</item>
+        <item>PIE/TPE Interchange</item>
+        <item>Simei</item>
+        <item>Tampines Town</item>
+        <item>Tampines Ave 5</item>
+        <item>Jalan Eunos</item>
+        <item>Paya Lebar Way</item>
+        <item>Bendemeer Exit</item>
+        <item>PIE/CTE (City) Interchange</item>
+        <item>PIE/CTE (SLE) Interchange</item>
+        <item>Kim Keat Link</item>
+        <item>Thomson Rd</item>
+        <item>Whitley Rd</item>
+        <item>Adam Rd</item>
+        <item>Eng Neo Ave</item>
+        <item>PIE/BKE Interchange</item>
+        <item>Clementi Rd</item>
+        <item>Clementi Ave 6</item>
+        <item>Bukit Batok East Ave 3</item>
+        <item>Jurong Town Hall Rd</item>
+        <item>Jurong East Ave 1</item>
+        <item>Jurong West Ave 2</item>
+        <item>PIE/KJE Interchange</item>
+        <item>Jalan Bahar</item>
+        <item>Pioneer Rd North</item>
+		<item>Upper Jurong Rd</item>
+    </string-array>
+    
+    <string-array name="pie_tuas_cam">
+        <item>23</item>
+        <item>25</item>
+        <item>30</item>
+        <item>27</item>
+        <item>32</item>
+        <item>28</item>
+        <item>31</item>
+        <item>29</item>
+        <item>22</item>
+        <item>26</item> 
+    </string-array>
+    
+</resources>

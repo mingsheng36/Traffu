@@ -1,0 +1,15 @@
+<resources>
+
+    <style name="title">
+        <item name="android:textSize">28sp</item>
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+    
+    <style name="main_title">
+        <item name="android:textSize">40sp</item>
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+    
+</resources>

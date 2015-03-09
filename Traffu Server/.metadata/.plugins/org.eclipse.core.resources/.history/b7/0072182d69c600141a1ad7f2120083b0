@@ -1,0 +1,61 @@
+'''
+Created on 9 Mar 2015
+
+@author: Tan Ming Sheng
+'''
+from django.http import HttpResponse
+import urllib2
+from lxml import html
+from models import News, Ids
+import sys, requests, json
+
+def index(request):
+    if request.method == 'GET':
+        try:
+            url = "http://www.onemotoring.com.sg/publish/onemotoring/en/on_the_roads/traffic_news.main.step1.html?viewType=RoadName&filterBy=All+Roads&sortBy=1"
+            #url = "http://www.onemotoring.com.sg/publish/onemotoring/en/on_the_roads/traffic_news.main.step1.html?viewType=RoadName&filterBy=All+Roads&sortBy=All+Types"
+            #url =  "http://www.onemotoring.com.sg/publish/onemotoring/en/on_the_roads/traffic_news.main.step1.html?viewType=RoadName&filterBy=Expressways&sortBy=8"
+            req = urllib2.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
+            res = urllib2.urlopen(req)
+            news = html.fromstring(res.read()).xpath("/html/body/div[3]/div[3]/div[5]/div/div[3]/div[1]/div[1]/form/div/div[3]/div/div[1]/div/div[3]/p/text()")
+            # new updates
+            print 
+            if News.objects.filter(news=news).count() == 0:
+                News.objects.all().delete()
+                News(news=news).save()
+                print "Update size of data: " + str(sys.getsizeof(news)) + "\r\n" + str(news)
+                
+                #send google notification
+                google_url = 'https://android.googleapis.com/gcm/send'
+                headers = {'content-type': 'application/json', 'Authorization':'key=AIzaSyCVvLAiWbVTK8yxQjbt73xdkj0vOZ2hlhQ'}
+                payload = {'news': ','.join(news)}
+                print json.dumps(payload)
+                r = requests.post(google_url, data=json.dumps(payload), headers=headers)
+                print r.text
+                formatted_response = ""
+                for n in news:
+                    formatted_response += n + "<br/>"
+                return HttpResponse("Size of data: " + str(sys.getsizeof(news)) + "<br/>" + formatted_response)
+            # no updates
+            else:
+                google_url = 'https://android.googleapis.com/gcm/send'
+                headers = {'content-type': 'application/json', 'Authorization':'key=AIzaSyCVvLAiWbVTK8yxQjbt73xdkj0vOZ2hlhQ'}
+                payload = {'news': ','.join(news)}
+                print json.dumps(payload)
+                r = requests.post(google_url, data=json.dumps(payload), headers=headers)
+                print r.text
+                return HttpResponse("No Updates")
+            
+        except Exception as err:
+            print err
+
+def register(request):
+    if request.method == 'GET':
+        try:
+            id = request.GET['reg_id']
+            Ids.objects.get(id=id)
+            Ids(id=id).save();
+            return HttpResponse("success")
+        except Exception as err:
+            return HttpResponse("exist")
+    return HttpResponse

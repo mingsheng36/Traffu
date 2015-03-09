@@ -1,0 +1,6 @@
+from django.http import HttpResponse
+
+def index(request):
+    req = urllib2.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
+    resp = urllib2.urlopen(req)
+    return HttpResponse("Rango says hey there world!")

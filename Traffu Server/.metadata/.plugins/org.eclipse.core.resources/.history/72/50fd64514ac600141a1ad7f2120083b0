@@ -1,0 +1,14 @@
+from django.http import HttpResponse
+import urllib2
+from lxml import html
+
+def index(request):
+    if request.method == 'GET':
+        try:
+            url = "http://www.onemotoring.com.sg/publish/onemotoring/en/on_the_roads/traffic_news.main.step1.html?viewType=RoadName&filterBy=Expressways&sortBy=8"
+            req = urllib2.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
+            res = urllib2.urlopen(req)
+            html.fromstring(res.read()).xpath("/html/body/div[3]/div[3]/div[5]/div/div[3]/div[1]/div[1]/form/div/div[3]/div/div[1]/div/div[3]/p/text()")
+        except Exception as err:
+            print err
+    return HttpResponse("Rango says hey there world!")

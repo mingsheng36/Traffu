@@ -1,0 +1,143 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg3"
+    android:scaleType="fitXY"
+    tools:context="sg.traffu.Home" >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:background="#80000000" >
+        
+        <ImageView
+            android:id="@+id/iv1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:contentDescription="@string/na"
+            android:src="@drawable/c8" />
+        
+        <ImageView
+            android:id="@+id/iv2"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="25dp"
+            android:contentDescription="@string/na"
+            android:src="@drawable/cte"
+            android:tag="cte" />
+
+        <TextView
+            android:id="@+id/tv1"
+            style="@style/main_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/iv1"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="18dp"
+            android:text="@string/app_name" />
+
+        <ImageView
+            android:id="@+id/iv3"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/iv2"
+            android:layout_marginRight="16dp"
+            android:contentDescription="@string/na"
+            android:src="@drawable/tpe"
+            android:tag="tpe" />
+
+        <ImageView
+            android:id="@+id/iv7"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_alignLeft="@+id/iv2"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="25dp"
+            android:contentDescription="@string/na"
+            android:src="@drawable/mce"
+            android:tag="mce" />
+
+        <ImageView
+            android:id="@+id/iv5"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_above="@+id/iv6"
+            android:layout_alignLeft="@+id/iv6"
+            android:layout_marginBottom="53dp"
+            android:contentDescription="@string/na"
+            android:src="@drawable/pie"
+            android:tag="pie" />
+
+        <ImageView
+            android:id="@+id/iv4"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_alignLeft="@+id/iv3"
+            android:layout_alignTop="@+id/tv1"
+            android:layout_marginTop="16dp"
+            android:contentDescription="@string/na"
+            android:src="@drawable/kpe"
+            android:tag="kpe" />
+
+        <ImageView
+            android:id="@+id/iv9"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_alignLeft="@+id/iv10"
+            android:layout_alignTop="@+id/iv4"
+            android:contentDescription="@string/na"
+            android:src="@drawable/bke"
+            android:tag="bke" />
+
+        <ImageView
+            android:id="@+id/iv11"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_alignLeft="@+id/iv9"
+            android:layout_alignTop="@+id/iv3"
+            android:contentDescription="@string/na"
+            android:src="@drawable/sle"
+            android:tag="sle" />
+
+        <ImageView
+            android:id="@+id/iv6"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_above="@+id/iv7"
+            android:layout_alignLeft="@+id/iv4"
+            android:contentDescription="@string/na"
+            android:src="@drawable/ecp"
+            android:tag="ecp" />
+
+        <ImageView
+            android:id="@+id/iv8"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_above="@+id/iv7"
+            android:layout_alignLeft="@+id/iv10"
+            android:contentDescription="@string/na"
+            android:src="@drawable/aye"
+            android:tag="aye" />
+
+        <ImageView
+            android:id="@+id/iv10"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignTop="@+id/iv5"
+            android:layout_marginLeft="13dp"
+            android:contentDescription="@string/na"
+            android:src="@drawable/kje"
+            android:tag="kje" />
+
+    </RelativeLayout>
+
+</RelativeLayout>

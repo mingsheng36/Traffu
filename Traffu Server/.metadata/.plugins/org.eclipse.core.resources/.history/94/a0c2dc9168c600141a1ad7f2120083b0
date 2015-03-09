@@ -1,0 +1,15 @@
+'''
+Created on 9 Mar 2015
+
+@author: Jayden
+'''
+from django.db.models import Model, CharField
+
+class News(Model):
+    news = CharField(unique=True)
+    
+    def __unicode__(self):
+        return self.news
+
+class ids(Model):
+    ids = CharField()

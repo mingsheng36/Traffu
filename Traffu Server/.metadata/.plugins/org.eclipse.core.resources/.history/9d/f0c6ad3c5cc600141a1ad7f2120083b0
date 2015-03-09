@@ -1,0 +1,42 @@
+'''
+Created on 9 Mar 2015
+
+@author: Tan Ming Sheng
+'''
+from django.http import HttpResponse
+import urllib2
+import requests
+from lxml import html
+from models import News
+import sys
+
+
+def index(request):
+    if request.method == 'GET':
+        try:
+            url = "http://www.onemotoring.com.sg/publish/onemotoring/en/on_the_roads/traffic_news.main.step1.html?viewType=RoadName&filterBy=All+Roads&sortBy=All+Types"
+            req = urllib2.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
+            res = urllib2.urlopen(req)
+            news = html.fromstring(res.read()).xpath("/html/body/div[3]/div[3]/div[5]/div/div[3]/div[1]/div[1]/form/div/div[3]/div/div[1]/div/div[3]/p/text()")
+            # new updates
+            print 
+            if News.objects.filter(news=news).count() == 0:
+                News.objects.all().delete()
+                News(news=news).save()
+                print "Update size of data: " + str(sys.getsizeof(news)) + "\r\n" + news
+                
+                #send google notification
+                import json
+                url = 'https://android.googleapis.com/gcm/send'
+                headers = {'content-type': 'application/json', 'Authorization':'key=AIzaSyCVvLAiWbVTK8yxQjbt73xdkj0vOZ2hlhQ'}
+                payload = {}
+                r = requests.post(url, data=json.dumps(payload), headers=headers)
+                
+                return HttpResponse("Size of data: " + sys.getsizeof(news) + "\r\n" + news)
+            # no updates
+            else:
+                return HttpResponse("No Updates")
+            
+        except Exception as err:
+            print err
+    
