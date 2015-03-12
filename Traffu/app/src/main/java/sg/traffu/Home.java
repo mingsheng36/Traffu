@@ -5,14 +5,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.DragEvent;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.DragShadowBuilder;
 import android.view.View.OnDragListener;
 import android.widget.ImageView;
-
 
 public class Home extends Activity {
 
@@ -47,11 +44,8 @@ public class Home extends Activity {
 		iv1.setOnTouchListener(new View.OnTouchListener() {
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
-				Log.d("EVENT", Integer.toString(event.getAction()));
-
 				switch (event.getAction()) {
 				case MotionEvent.ACTION_DOWN:
-					Log.d("ACTION", "ACTION DOWN");
 					v.setVisibility(View.INVISIBLE);
 					DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(v);
 					v.startDrag(null, shadowBuilder, v, 0);
@@ -67,57 +61,40 @@ public class Home extends Activity {
 			}
 		});
 
-		//		final Handler handler = new Handler();
-		//        Runnable runnable = new Runnable() {
-		//        	int curr = 1;
-		//            public void run() {
-		//            	
-		//            	if (curr == 1) {
-		//            		iv1.setImageResource(R.drawable.c2);
-		//            		curr = 2;
-		//            		Log.d("Rs", "1");
-		//            		
-		//            	}
-		//            	
-		//            	else if (curr == 2) {
-		//            		iv1.setImageResource(R.drawable.c3);
-		//            		curr = 3;
-		//            		Log.d("Rs", "2");
-		//            		
-		//            	}
-		//            	
-		//            	else {
-		//            		iv1.setImageResource(R.drawable.c1);
-		//            		curr = 1;
-		//            		Log.d("Rs", "3");
-		//            		
-		//            	}
-		//            	           
-		//            	handler.postDelayed(this, 500);
-		//            }
-		//        };
-		//        handler.postDelayed(runnable, 500);
+/********* ANIMATION EFFECT FOR 'DRAG' BUTTON ***********/
+//        final Handler handler = new Handler();
+//        Runnable runnable = new Runnable() {
+//            int curr = 1;
+//            public void run() {
+//
+//                if (curr == 1) {
+//                    iv1.setImageResource(R.drawable.c2);
+//                    curr = 2;
+//                    Log.d("Rs", "1");
+//
+//                }
+//
+//                else if (curr == 2) {
+//                    iv1.setImageResource(R.drawable.c3);
+//                    curr = 3;
+//                    Log.d("Rs", "2");
+//
+//                }
+//
+//                else {
+//                    iv1.setImageResource(R.drawable.c8);
+//                    curr = 1;
+//                    Log.d("Rs", "3");
+//
+//                }
+//
+//                handler.postDelayed(this, 500);
+//            }
+//        };
+//        handler.postDelayed(runnable, 500);
 
 	}
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.main, menu);
-		return true;
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
-		int id = item.getItemId();
-		if (id == R.id.action_settings) {
-			return true;
-		}
-		return super.onOptionsItemSelected(item);
-	}
 
 }
 
@@ -126,25 +103,17 @@ class MyDragListener implements OnDragListener {
 	@Override
 	public boolean onDrag(final View v, DragEvent event) {
 
-		String msg = "ACTION";
-		Log.d(msg, "Drag Listener Activated");
-
 		switch(event.getAction()) {
-		case DragEvent.ACTION_DRAG_STARTED: 
-			Log.d(msg, "Action is DragEvent.ACTION_DRAG_STARTED");
+		case DragEvent.ACTION_DRAG_STARTED:
 			break;
 		case DragEvent.ACTION_DRAG_ENTERED:
-			Log.d(msg, "Action is DragEvent.ACTION_DRAG_ENTERED");
-			Log.e("MESSAGE", v.getTag().toString());
 			Intent intent = new Intent(v.getContext(), ExpressWay.class);
 			intent.putExtra("express_way", v.getTag().toString());
 			v.getContext().startActivity(intent);
 			break;
 		case DragEvent.ACTION_DRAG_EXITED :
-			Log.d(msg, "Action is DragEvent.ACTION_DRAG_EXITED");
 			break;
 		case DragEvent.ACTION_DRAG_LOCATION  :
-			Log.d(msg, "Action is DragEvent.ACTION_DRAG_LOCATION");
 			break;
 		case DragEvent.ACTION_DRAG_ENDED   :
 			final View droppedView = (View) event.getLocalState();
@@ -154,14 +123,12 @@ class MyDragListener implements OnDragListener {
 					v.getRootView().findViewById(R.id.iv1).setVisibility(View.VISIBLE);
 				}	
 			});
-			Log.d(msg, "Action is DragEvent.ACTION_DRAG_ENDED");		
 			break;
 		case DragEvent.ACTION_DROP:
-			Log.d(msg, "ACTION_DROP event");
 			break;
 		default: break;
 		}
 		return true;
 	}
 
-} 
+}

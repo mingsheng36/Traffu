@@ -1,12 +1,23 @@
 package sg.traffu;
 
+import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
 
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -19,7 +30,11 @@ import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.jjoe64.graphview.CustomLabelFormatter;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.GraphView.GraphViewData;
@@ -28,6 +43,30 @@ import com.jjoe64.graphview.GraphViewSeries.GraphViewSeriesStyle;
 import com.jjoe64.graphview.LineGraphView;
 
 public class ExpressWay extends Activity {
+
+    public static final String PROPERTY_REG_ID = "registration_id";
+    private static final String PROPERTY_APP_VERSION = "appVersion";
+    private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
+
+    String serverIP = "http://traffu-mingsheng36.rhcloud.com";
+    //String serverIP = "http://192.168.1.149:8000";
+
+    /**
+     * Substitute you own sender ID here. This is the project number you got
+     * from the API Console, as described in "Getting Started."
+     */
+    String SENDER_ID = "680851557511";
+
+    /**
+     * Tag used on log messages.
+     */
+    static final String TAG = "Traffu";
+
+    GoogleCloudMessaging gcm;
+    Context context;
+
+    String regid;
+    String expway;
 
 	String[] upper_exits;
 	String[] lower_exits;
@@ -45,7 +84,17 @@ public class ExpressWay extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.expway);
-		String expway = getIntent().getExtras().getString("express_way");
+		expway = getIntent().getExtras().getString("express_way");
+
+        // Check device for Play Services APK. If check succeeds, proceed with
+        //  GCM registration.
+        if (checkPlayServices()) {
+            gcm = GoogleCloudMessaging.getInstance(this);
+            context = getApplicationContext();
+            regid = getRegistrationId(context);
+            registerInBackground();
+            Toast.makeText(getApplicationContext(), "You will receive notifications on " + expway.toUpperCase(), Toast.LENGTH_SHORT).show();
+        }
 
 		TextView tv1 = (TextView) findViewById(R.id.tv1);
 		TextView tv2 = (TextView) findViewById(R.id.tv2);
@@ -137,7 +186,27 @@ public class ExpressWay extends Activity {
 		}
 		else if (expway.equals("kpe")) {
 			tv1.setText(R.string.kpe_city);
+            upper_exits = res.getStringArray(R.array.sle_seletar);
+            upper_cams = res.getStringArray(R.array.sle_seletar_cam);
+            GraphViewData[] kpe_upper = {
+                    new GraphViewData(1,1),
+                    new GraphViewData(2,1),
+                    new GraphViewData(3,1),
+                    new GraphViewData(4,1),
+                    new GraphViewData(5,1)
+            };
 			tv2.setText(R.string.kpe_punggol);
+            lower_exits = res.getStringArray(R.array.sle_seletar);
+            lower_cams = res.getStringArray(R.array.sle_seletar_cam);
+            GraphViewData[] kpe_lower = {
+                    new GraphViewData(1,1),
+                    new GraphViewData(2,1),
+                    new GraphViewData(3,1),
+                    new GraphViewData(4,1),
+                    new GraphViewData(5,1)
+            };
+            upper_series = new GraphViewSeries("", green, kpe_upper);
+            lower_series = new GraphViewSeries("", green, kpe_lower);
 		}
 		else if (expway.equals("pie")) {
 			
@@ -247,19 +316,106 @@ public class ExpressWay extends Activity {
 		}
 		else if (expway.equals("mce")) {
 			tv1.setText(R.string.mce_mb);
+            upper_exits = res.getStringArray(R.array.sle_seletar);
+            upper_cams = res.getStringArray(R.array.sle_seletar_cam);
+            GraphViewData[] mce_upper = {
+                    new GraphViewData(1,1),
+                    new GraphViewData(2,1),
+                    new GraphViewData(3,1),
+                    new GraphViewData(4,1),
+                    new GraphViewData(5,1),
+                    new GraphViewData(6,1),
+                    new GraphViewData(7,1),
+                    new GraphViewData(8,1),
+
+            };
 			tv2.setText(R.string.mce_tr);
+            lower_exits = res.getStringArray(R.array.sle_seletar);
+            lower_cams = res.getStringArray(R.array.sle_seletar_cam);
+            GraphViewData[] mce_lower = {
+                    new GraphViewData(1,1),
+                    new GraphViewData(2,1),
+                    new GraphViewData(3,1),
+                    new GraphViewData(4,1),
+                    new GraphViewData(5,1),
+                    new GraphViewData(6,1),
+                    new GraphViewData(7,1),
+                    new GraphViewData(8,1),
+            };
+            upper_series = new GraphViewSeries("", green, mce_upper);
+            lower_series = new GraphViewSeries("", green, mce_lower);
 		}
 		else if (expway.equals("aye")) {
 			tv1.setText(R.string.aye_city);
+            upper_exits = res.getStringArray(R.array.sle_seletar);
+            upper_cams = res.getStringArray(R.array.sle_seletar_cam);
+            GraphViewData[] aye_upper = {
+                    new GraphViewData(1,1),
+                    new GraphViewData(2,1),
+                    new GraphViewData(3,1),
+                    new GraphViewData(4,1),
+                    new GraphViewData(5,1)
+            };
 			tv2.setText(R.string.aye_tuas);
+            lower_exits = res.getStringArray(R.array.sle_seletar);
+            lower_cams = res.getStringArray(R.array.sle_seletar_cam);
+            GraphViewData[] aye_lower = {
+                    new GraphViewData(1,1),
+                    new GraphViewData(2,1),
+                    new GraphViewData(3,1),
+                    new GraphViewData(4,1),
+                    new GraphViewData(5,1)
+            };
+            upper_series = new GraphViewSeries("", green, aye_upper);
+            lower_series = new GraphViewSeries("", green, aye_lower);
 		}
 		else if (expway.equals("kje")) {
 			tv1.setText(R.string.kje_bp);
+            upper_exits = res.getStringArray(R.array.sle_seletar);
+            upper_cams = res.getStringArray(R.array.sle_seletar_cam);
+            GraphViewData[] kje_upper = {
+                    new GraphViewData(1,1),
+                    new GraphViewData(2,1),
+                    new GraphViewData(3,1),
+                    new GraphViewData(4,1),
+                    new GraphViewData(5,1)
+            };
 			tv2.setText(R.string.kje_jurong);
+            lower_exits = res.getStringArray(R.array.sle_seletar);
+            lower_cams = res.getStringArray(R.array.sle_seletar_cam);
+            GraphViewData[] kje_lower = {
+                    new GraphViewData(1,1),
+                    new GraphViewData(2,1),
+                    new GraphViewData(3,1),
+                    new GraphViewData(4,1),
+                    new GraphViewData(5,1)
+            };
+            upper_series = new GraphViewSeries("", green, kje_upper);
+            lower_series = new GraphViewSeries("", green, kje_lower);
 		}
 		else if (expway.equals("bke")) {
 			tv1.setText(R.string.bke_bt);
+            upper_exits = res.getStringArray(R.array.sle_seletar);
+            upper_cams = res.getStringArray(R.array.sle_seletar_cam);
+            GraphViewData[] bke_upper = {
+                    new GraphViewData(1,1),
+                    new GraphViewData(2,1),
+                    new GraphViewData(3,1),
+                    new GraphViewData(4,1),
+                    new GraphViewData(5,1)
+            };
 			tv2.setText(R.string.bke_woodlands);
+            lower_exits = res.getStringArray(R.array.sle_seletar);
+            lower_cams = res.getStringArray(R.array.sle_seletar_cam);
+            GraphViewData[] bke_lower = {
+                    new GraphViewData(1,1),
+                    new GraphViewData(2,1),
+                    new GraphViewData(3,1),
+                    new GraphViewData(4,1),
+                    new GraphViewData(5,1)
+            };
+            upper_series = new GraphViewSeries("", green, bke_upper);
+            lower_series = new GraphViewSeries("", green, bke_lower);
 		}
 		else if (expway.equals("sle")) {
 	
@@ -291,7 +447,6 @@ public class ExpressWay extends Activity {
 
 			upper_series = new GraphViewSeries("", green, sle_seletar);
 			lower_series = new GraphViewSeries("", green, sle_woodlands);
-			
 		}
 
 		/***************************************************/
@@ -331,61 +486,63 @@ public class ExpressWay extends Activity {
 						return upper_exits[2];
 					} else if (value >= 4 && value < 5) {
 						return upper_exits[3];
-					} else if (value >= 5 && value < 6) {
-						return upper_exits[4];
-					} else if (value >= 6 && value < 7) {
-						return upper_exits[5];
-					} else if (value >= 7 && value < 8) {
-						return upper_exits[6];
-					} else if (value >= 8 && value < 9) {
-						return upper_exits[7];
-					} else if (value >= 9 && value < 10) {
-						return upper_exits[8];
-					} else if (value >= 10 && value < 11) {
-						return upper_exits[9];
-					} else if (value >= 11 && value < 12) {
-						return upper_exits[10];
-					} else if (value >= 12 && value < 13) {
-						return upper_exits[11];
-					} else if (value >= 13 && value < 14) {
-						return upper_exits[12];
-					} else if (value >= 14 && value < 15) {
-						return upper_exits[13];
-					} else if (value >= 15 && value < 16) {
-						return upper_exits[14];
-					} else if (value >= 16 && value < 17) {
-						return upper_exits[15];
-					} else if (value >= 17 && value < 18) {
-						return upper_exits[16];
-					} else if (value >= 18 && value < 19) {
-						return upper_exits[17];
-					} else if (value >= 19 && value < 20) {
-						return upper_exits[18];
-					} else if (value >= 20 && value < 21) {
-						return upper_exits[19];
-					} else if (value >= 21 && value < 22) {
-						return upper_exits[20];
-					} else if (value >= 22 && value < 23) {
-						return upper_exits[21];
-					} else if (value >= 23 && value < 24) {
-						return upper_exits[22];
-					} else if (value >= 24 && value < 25) {
-						return upper_exits[23];
-					} else if (value >= 25 && value < 26) {
-						return upper_exits[24];
-					} else if (value >= 26 && value < 27) {
-						return upper_exits[25];
-					} else if (value >= 27 && value < 28) {
-						return upper_exits[26];
-					} else if (value >= 28 && value < 29) {
-						return upper_exits[27];
-					} else if (value >= 29 && value < 30) {
-						return upper_exits[28];
-					} else if (value == 30) {
-						return upper_exits[29];
-					}else {				
-						return null;
-					}
+					} else {
+                        if (value >= 5 && value < 6) {
+                            return upper_exits[4];
+                        } else if (value >= 6 && value < 7) {
+                            return upper_exits[5];
+                        } else if (value >= 7 && value < 8) {
+                            return upper_exits[6];
+                        } else if (value >= 8 && value < 9) {
+                            return upper_exits[7];
+                        } else if (value >= 9 && value < 10) {
+                            return upper_exits[8];
+                        } else if (value >= 10 && value < 11) {
+                            return upper_exits[9];
+                        } else if (value >= 11 && value < 12) {
+                            return upper_exits[10];
+                        } else if (value >= 12 && value < 13) {
+                            return upper_exits[11];
+                        } else if (value >= 13 && value < 14) {
+                            return upper_exits[12];
+                        } else if (value >= 14 && value < 15) {
+                            return upper_exits[13];
+                        } else if (value >= 15 && value < 16) {
+                            return upper_exits[14];
+                        } else if (value >= 16 && value < 17) {
+                            return upper_exits[15];
+                        } else if (value >= 17 && value < 18) {
+                            return upper_exits[16];
+                        } else if (value >= 18 && value < 19) {
+                            return upper_exits[17];
+                        } else if (value >= 19 && value < 20) {
+                            return upper_exits[18];
+                        } else if (value >= 20 && value < 21) {
+                            return upper_exits[19];
+                        } else if (value >= 21 && value < 22) {
+                            return upper_exits[20];
+                        } else if (value >= 22 && value < 23) {
+                            return upper_exits[21];
+                        } else if (value >= 23 && value < 24) {
+                            return upper_exits[22];
+                        } else if (value >= 24 && value < 25) {
+                            return upper_exits[23];
+                        } else if (value >= 25 && value < 26) {
+                            return upper_exits[24];
+                        } else if (value >= 26 && value < 27) {
+                            return upper_exits[25];
+                        } else if (value >= 27 && value < 28) {
+                            return upper_exits[26];
+                        } else if (value >= 28 && value < 29) {
+                            return upper_exits[27];
+                        } else if (value >= 29 && value < 30) {
+                            return upper_exits[28];
+                        } else if (value == 30) {
+                            return upper_exits[29];
+                        } else {
+                            return null;
+                        }
+                    }
 				}
 				return null;
 			}
@@ -410,7 +567,6 @@ public class ExpressWay extends Activity {
 		time2.setCustomLabelFormatter(new CustomLabelFormatter() {
 			@Override
 			public String formatLabel(double value, boolean isValueX) {
-				Log.e(Double.toString(value), Boolean.toString(isValueX));
 				if (isValueX) {
 					if (value >= 1 && value < 2) {
 						return lower_exits[0];
@@ -488,7 +644,7 @@ public class ExpressWay extends Activity {
 		lower_images = (LinearLayout) findViewById(R.id.lower_images);
 
 		//json load images
-		//new AsyncTaskParseJson().execute();
+		new AsyncTaskParseJson().execute();
 
 	}
 
@@ -508,7 +664,6 @@ public class ExpressWay extends Activity {
 				InputStream in = new java.net.URL(urldisplay).openStream();
 				mIcon11 = BitmapFactory.decodeStream(in);
 			} catch (Exception e) {
-				Log.e("Error", e.getMessage());
 				e.printStackTrace();
 			}
 			return mIcon11;
@@ -526,7 +681,7 @@ public class ExpressWay extends Activity {
 
 	private class AsyncTaskParseJson extends AsyncTask<String, String, JSONArray> {
 
-		String yourJsonStringUrl = "https://www.kimonolabs.com/api/4nmcwceg?apikey=cQOzDxTQLTsYstrAjZEDQAEl57Og8TjH";
+		String yourJsonStringUrl = "https://www.kimonolabs.com/api/6ait7nxe?apikey=cQOzDxTQLTsYstrAjZEDQAEl57Og8TjH";
 		JSONArray dataJsonArr = null;
 		@Override
 		protected JSONArray doInBackground(String... arg0) {
@@ -556,45 +711,38 @@ public class ExpressWay extends Activity {
 				for (int i = 0; i < dataJsonArr.length(); i++) {
 
 					JSONObject c = dataJsonArr.getJSONObject(i);
-					String point = c.getString("point");
-					JSONObject img = c.getJSONObject("img");
+                    JSONObject img = c.getJSONObject("img");
 					String url = img.getString("src");
 
-					for (int j = 0; j < upper_cams.length; j++) {
-						if (Integer.parseInt(upper_cams[j]) == i+1) {
-							Log.e("sss", point + " " + img);
-							upper_image_array[i] = new ImageView(getApplicationContext());
-							upper_image_array[i].setLayoutParams(new LayoutParams(
-									400,
-									LayoutParams.MATCH_PARENT));
-							upper_image_array[i].setScaleType(ScaleType.FIT_XY);
-							new DownloadImageTask(upper_image_array[i], "upper").execute(url);
-						}
-					}
+                    for (String upper_cam : upper_cams) {
+                        if (Integer.parseInt(upper_cam) == i + 1) {
+                            upper_image_array[i] = new ImageView(getApplicationContext());
+                            upper_image_array[i].setLayoutParams(new LayoutParams(
+                                    400,
+                                    LayoutParams.MATCH_PARENT));
+                            upper_image_array[i].setScaleType(ScaleType.FIT_XY);
+                            new DownloadImageTask(upper_image_array[i], "upper").execute(url);
+                        }
+                    }
 
 				}
-				
+
 				for (int i = dataJsonArr.length(); i > 0; i--) {
 					
 					JSONObject c = dataJsonArr.getJSONObject(i-1);
-					String point = c.getString("point");
-					JSONObject img = c.getJSONObject("img");
+                    JSONObject img = c.getJSONObject("img");
 					String url = img.getString("src");
-					
-					for (int k = 0; k < lower_cams.length; k++) {
-						
-						Log.e("final", i+1 + " " + Integer.parseInt(lower_cams[k]));
-						if (Integer.parseInt(lower_cams[k]) == i) {
-							Log.e("sss", point + " " + img);
-							
-							lower_image_array[i] = new ImageView(getApplicationContext());
-							lower_image_array[i].setLayoutParams(new LayoutParams(
-									400,
-									LayoutParams.MATCH_PARENT));
-							lower_image_array[i].setScaleType(ScaleType.FIT_XY);
-							new DownloadImageTask(lower_image_array[i], "lower").execute(url);
-						}
-					}
+
+                    for (String lower_cam : lower_cams) {
+                        if (Integer.parseInt(lower_cam) == i) {
+                            lower_image_array[i] = new ImageView(getApplicationContext());
+                            lower_image_array[i].setLayoutParams(new LayoutParams(
+                                    400,
+                                    LayoutParams.MATCH_PARENT));
+                            lower_image_array[i].setScaleType(ScaleType.FIT_XY);
+                            new DownloadImageTask(lower_image_array[i], "lower").execute(url);
+                        }
+                    }
 				}
 
 			} catch (JSONException e) {
@@ -604,6 +752,222 @@ public class ExpressWay extends Activity {
 		}
 	}
 
+    // You need to do the Play Services APK check here too.
+    @Override
+    protected void onResume() {
+        super.onResume();
+        checkPlayServices();
+        updateInBackground("online");
+    }
+
+    /**
+     * Check the device to make sure it has the Google Play Services APK. If
+     * it doesn't, display a dialog that allows users to download the APK from
+     * the Google Play Store or enable it in the device's system settings.
+     */
+    private boolean checkPlayServices() {
+        int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
+        if (resultCode != ConnectionResult.SUCCESS) {
+            if (GooglePlayServicesUtil.isUserRecoverableError(resultCode)) {
+                GooglePlayServicesUtil.getErrorDialog(resultCode, this,
+                        PLAY_SERVICES_RESOLUTION_REQUEST).show();
+            } else {
+                finish();
+            }
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Gets the current registration ID for application on GCM service.
+     * <p>
+     * If result is empty, the app needs to register.
+     *
+     * @return registration ID, or empty string if there is no existing
+     *         registration ID.
+     */
+    private String getRegistrationId(Context context) {
+        final SharedPreferences prefs = getGCMPreferences();
+        String registrationId = prefs.getString(PROPERTY_REG_ID, "");
+        if (registrationId.isEmpty()) {
+            Log.i(TAG, "Registration not found.");
+            return "";
+        }
+        // Check if app was updated; if so, it must clear the registration ID
+        // since the existing registration ID is not guaranteed to work with
+        // the new app version.
+        int registeredVersion = prefs.getInt(PROPERTY_APP_VERSION, Integer.MIN_VALUE);
+        int currentVersion = getAppVersion(context);
+        if (registeredVersion != currentVersion) {
+            Log.i(TAG, "App version changed.");
+            return "";
+        }
+        return registrationId;
+    }
+
+    /**
+     * @return Application's {@code SharedPreferences}.
+     */
+    private SharedPreferences getGCMPreferences() {
+        // This sample app persists the registration ID in shared preferences, but
+        // how you store the registration ID in your app is up to you.
+        return getSharedPreferences(ExpressWay.class.getSimpleName(),
+                Context.MODE_PRIVATE);
+    }
+
+    /**
+     * @return Application's version code from the {@code PackageManager}.
+     */
+    private static int getAppVersion(Context context) {
+        try {
+            PackageInfo packageInfo = context.getPackageManager()
+                    .getPackageInfo(context.getPackageName(), 0);
+            return packageInfo.versionCode;
+        } catch (PackageManager.NameNotFoundException e) {
+            // should never happen
+            throw new RuntimeException("Could not get package name: " + e);
+        }
+    }
+
+    /**
+     * Registers the application with GCM servers asynchronously.
+     * <p>
+     * Stores the registration ID and app versionCode in the application's
+     * shared preferences.
+     */
+    private void registerInBackground() {
+        new AsyncTask<Void, Void, String>() {
+
+            @Override
+            protected String doInBackground(Void... params) {
+                String msg;
+                try {
+                    if (gcm == null) {
+                        gcm = GoogleCloudMessaging.getInstance(context);
+                    }
+                    regid = gcm.register(SENDER_ID);
+                    msg = "Device registered, registration ID=" + regid;
+                    // You should send the registration ID to your server over HTTP,
+                    // so it can use GCM/HTTP or CCS to send messages to your app.
+                    // The request to your server should be authenticated if your app
+                    // is using accounts.
+                    sendOnline();
+
+                    // For this demo: we don't need to send it because the device
+                    // will send upstream messages to a server that echo back the
+                    // message using the 'from' address in the message.
+
+                    // Persist the registration ID - no need to register again.
+                    storeRegistrationId(context, regid);
+                } catch (IOException ex) {
+                    msg = "Error :" + ex.getMessage();
+                    // If there is an error, don't just keep trying to register.
+                    // Require the user to click a button again, or perform
+                    // exponential back-off.
+                }
+                return msg;
+            }
+
+        }.execute(null, null, null);
+
+    }
+
+
+    /**
+     * Stores the registration ID and app versionCode in the application's
+     * {@code SharedPreferences}.
+     *
+     * @param context application's context.
+     * @param regId registration ID
+     */
+    private void storeRegistrationId(Context context, String regId) {
+        final SharedPreferences prefs = getGCMPreferences();
+        int appVersion = getAppVersion(context);
+        Log.i(TAG, "Saving regId on app version " + appVersion);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString(PROPERTY_REG_ID, regId);
+        editor.putInt(PROPERTY_APP_VERSION, appVersion);
+        editor.apply();
+    }
+
+    private void sendOnline() {
+        try {
+            // Create http client object to send request to server
+            HttpClient client = new DefaultHttpClient();
+            // Create URL string
+            String URL = serverIP + "/update?rid=" + regid + "&state=online&expway=" + expway;
+            // Create Request to server and get response
+            HttpGet httpget= new HttpGet();
+            httpget.setURI(new URI(URL));
+            client.execute(httpget);
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        } catch (ClientProtocolException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void updateInBackground(final String status) {
+        new AsyncTask<Void, Void, String>() {
+
+            @Override
+            protected String doInBackground(Void... params) {
+                String msg;
+                try {
+                    if (gcm == null) {
+                        gcm = GoogleCloudMessaging.getInstance(context);
+                    }
+                    regid = gcm.register(SENDER_ID);
+                    msg = "Device registered, registration ID=" + regid;
+                    // You should send the registration ID to your server over HTTP,
+                    // so it can use GCM/HTTP or CCS to send messages to your app.
+                    // The request to your server should be authenticated if your app
+                    // is using accounts.
+                    if (status.equals("online")) {
+                        sendOnline();
+                    } else if (status.equals("offline")) {
+                        sendOffline();
+                    }
+                    // For this demo: we don't need to send it because the device
+                    // will send upstream messages to a server that echo back the
+                    // message using the 'from' address in the message.
+
+                    // Persist the registration ID - no need to register again.
+                    storeRegistrationId(context, regid);
+                } catch (IOException ex) {
+                    msg = "Error :" + ex.getMessage();
+                    // If there is an error, don't just keep trying to register.
+                    // Require the user to click a button again, or perform
+                    // exponential back-off.
+                }
+                return msg;
+            }
+
+        }.execute(null, null, null);
+
+    }
+
+    private void sendOffline() {
+        try {
+            // Create http client object to send request to server
+            HttpClient client = new DefaultHttpClient();
+            // Create URL string
+            String URL = serverIP + "/update?rid=" + regid + "&state=offline&expway=null";
+            // Create Request to server and get response
+            HttpGet httpget= new HttpGet();
+            httpget.setURI(new URI(URL));
+            client.execute(httpget);
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+        catch (ClientProtocolException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 }
-
-
