@@ -63,6 +63,7 @@ public class ExpressWay extends Activity {
     static final String TAG = "Traffu";
 
     GoogleCloudMessaging gcm;
+    //SharedPreferences prefs;
     Context context;
 
     String regid;
@@ -84,16 +85,34 @@ public class ExpressWay extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.expway);
+
 		expway = getIntent().getExtras().getString("express_way");
+
+        // Check device for Play Services APK. If check succeeds, proceed with
+        //  GCM registration.
+//        if (checkPlayServices()) {
+//            gcm = GoogleCloudMessaging.getInstance(this);
+//            context = getApplicationContext();
+//            regid = getRegistrationId(context);
+//            registerInBackground();
+//        }
+
+        context = getApplicationContext();
 
         // Check device for Play Services APK. If check succeeds, proceed with
         //  GCM registration.
         if (checkPlayServices()) {
             gcm = GoogleCloudMessaging.getInstance(this);
-            context = getApplicationContext();
             regid = getRegistrationId(context);
-            registerInBackground();
-            Toast.makeText(getApplicationContext(), "You will receive notifications on " + expway.toUpperCase(), Toast.LENGTH_SHORT).show();
+
+            if (regid.isEmpty()) {
+                registerInBackground();
+            }
+            updateInBackground("online");
+            Toast.makeText(context, "You will receive notifications on " + expway.toUpperCase(), Toast.LENGTH_SHORT).show();
+
+        } else {
+            Log.i(TAG, "No valid Google Play Services APK found.");
         }
 
 		TextView tv1 = (TextView) findViewById(R.id.tv1);
@@ -757,7 +776,7 @@ public class ExpressWay extends Activity {
     protected void onResume() {
         super.onResume();
         checkPlayServices();
-        updateInBackground("online");
+        //updateInBackground("online");
     }
 
     /**
@@ -772,6 +791,7 @@ public class ExpressWay extends Activity {
                 GooglePlayServicesUtil.getErrorDialog(resultCode, this,
                         PLAY_SERVICES_RESOLUTION_REQUEST).show();
             } else {
+                Log.i(TAG, "This device is not supported.");
                 finish();
             }
             return false;
@@ -838,7 +858,6 @@ public class ExpressWay extends Activity {
      */
     private void registerInBackground() {
         new AsyncTask<Void, Void, String>() {
-
             @Override
             protected String doInBackground(Void... params) {
                 String msg;

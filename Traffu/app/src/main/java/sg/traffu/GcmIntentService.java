@@ -71,7 +71,7 @@ public class GcmIntentService extends IntentService {
 
         Intent i = new Intent(this, ExpressWay.class);
         i.putExtra("express_way", msgSplit[0]);
-        PendingIntent contentIntent = PendingIntent.getActivity(this, 0, i, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent contentIntent = PendingIntent.getActivity(this, 0, i, PendingIntent.FLAG_CANCEL_CURRENT);
 
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
